@@ -21,7 +21,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123\",\n    \"name\": \"Test User\"\n}"
+              "raw": "{\n    \"email\": \"odetoyinbopelumi42@gmail.com\",\n    \"password\": \"Olajesu1974#\",\n    \"name\": \"Test User\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/register",
@@ -44,7 +44,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123\"\n}"
+              "raw": "{\n    \"email\": \"odetoyinbopelumi42@gmail.com\",\n    \"password\": \"Olajesu1974#\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/login",
@@ -94,6 +94,129 @@
               "path": ["api", "auth", "profile"]
             },
             "description": "Get current user profile"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            },
+            "description": "Get all available moment categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Save Director Categories",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"category_ids\": [\"milestones\", \"emotional-support\", \"celebrations\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/director",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "director"]
+            },
+            "description": "Save director's selected moment categories"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile Pictures",
+      "item": [
+        {
+          "name": "Get All Avatars",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{baseUrl}}/api/avatars",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "avatars"]
+            },
+            "description": "Get all available avatar options"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Profile Picture",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/avatars/upload/profile-picture",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "avatars", "upload", "profile-picture"]
+            },
+            "description": "Upload a profile picture file"
+          },
+          "response": []
+        },
+        {
+          "name": "Save Profile Picture",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"avatar\",\n    \"data\": \"avatar-1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/avatars/director/profile-picture",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "avatars", "director", "profile-picture"]
+            },
+            "description": "Save director's profile picture (either uploaded image or selected avatar)"
           },
           "response": []
         }

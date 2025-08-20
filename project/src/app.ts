@@ -6,6 +6,8 @@ import morgan from 'morgan';
 import authRoutes from './routes/authRoutes';
 import childrenRoutes from './routes/childrenRoutes';
 import messageRoutes from './routes/messageRoutes';
+import categoriesRoutes from './routes/categoriesRoutes';
+import profilePictureRoutes from './routes/profilePictureRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -20,6 +22,8 @@ app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/children', childrenRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/avatars', profilePictureRoutes);
 
 // Base route
 app.get('/', (req, res) => {

@@ -58,6 +58,17 @@ src/
 - `PUT /api/messages/:id` - Update a message (protected)
 - `DELETE /api/messages/:id` - Delete a message (protected)
 
+### Categories
+
+- `GET /api/categories` - Get all available moment categories
+- `POST /api/categories/director` - Save director's selected categories (protected)
+
+### Profile Pictures
+
+- `GET /api/avatars` - Get all available avatar options
+- `POST /api/avatars/upload/profile-picture` - Upload a profile picture file (protected)
+- `POST /api/avatars/director/profile-picture` - Save director's profile picture (protected)
+
 ## Setup and Installation
 
 1. Clone the repository
@@ -76,3 +87,4 @@ The API expects the following tables to exist in your Supabase database:
 - `users`: User profiles
 - `children`: Child profiles associated with users
 - `messages`: Messages scheduled for delivery
+- `director_categories`: Junction table linking directors to their selected categories
