@@ -7,7 +7,7 @@ export const getAllAvatars = async (): Promise<Avatar[]> => {
   try {
     // Fetch avatars from Supabase Storage bucket
     const { data: files, error } = await supabase.storage
-      .from('avatars')
+      .from('profile-pictures')
       .list('', {
         limit: 100,
         offset: 0,
@@ -23,13 +23,13 @@ export const getAllAvatars = async (): Promise<Avatar[]> => {
       return [];
     }
 
-    // Convert storage files to Avatar objects
-    const avatars: Avatar[] = files
-      .filter(file => file.name && file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
-      .map((file, index) => {
-        const { data: urlData } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(file.name);
+            // Convert storage files to Avatar objects
+        const avatars: Avatar[] = files
+          .filter(file => file.name && file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+          .map((file, index) => {
+            const { data: urlData } = supabase.storage
+              .from('profile-pictures')
+              .getPublicUrl(file.name);
         
         return {
           id: `avatar-${index + 1}`,
@@ -118,7 +118,7 @@ export const uploadProfilePicture = async (
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('avatars')
+      .from('profile-pictures')
       .upload(fileName, file.buffer, {
         contentType: file.mimetype,
         cacheControl: '3600',
@@ -131,7 +131,7 @@ export const uploadProfilePicture = async (
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from('avatars')
+      .from('profile-pictures')
       .getPublicUrl(fileName);
 
     return {
