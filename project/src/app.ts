@@ -23,7 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/children', childrenRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoriesRoutes);
-app.use('/api/avatars', profilePictureRoutes);
+app.use('/api/profile-pictures', profilePictureRoutes);
 
 // Base route
 app.get('/', (req, res) => {
