@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import authRoutes from './routes/authRoutes';
 import childrenRoutes from './routes/childrenRoutes';
+import childProfileRoutes from './routes/childProfileRoutes';
 import messageRoutes from './routes/messageRoutes';
 import categoriesRoutes from './routes/categoriesRoutes';
 import profilePictureRoutes from './routes/profilePictureRoutes';
@@ -21,6 +22,7 @@ app.use(morgan('dev'));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/children', childrenRoutes);
+app.use('/api/child-profiles', childProfileRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/profile-pictures', profilePictureRoutes);
