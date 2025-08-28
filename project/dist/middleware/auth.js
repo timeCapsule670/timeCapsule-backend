@@ -40,13 +40,34 @@ const authenticate = async (req, res, next) => {
     }
 };
 exports.authenticate = authenticate;
-// Optional: Add role-based authorization middleware
+// Role-based authorization middleware
 const authorize = (roles) => {
     return (req, res, next) => {
-        if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
+        // Development bypass - uncomment this line to bypass role checks during development
+        // if (process.env.NODE_ENV === 'development') return next();
+        // Debug logging
+        console.log('Authorization check:', {
+            userId: req.user?.id,
+            userRole: req.user?.role,
+            requiredRoles: roles,
+            hasRole: req.user?.role && roles.includes(req.user.role)
+        });
+        // Check if user exists and has a role
+        if (!req.user) {
             return res.status(403).json({
                 success: false,
-                error: 'You do not have permission to access this resource.'
+                error: 'User not authenticated for authorization.'
+            });
+        }
+        // If no specific role is required, allow access
+        if (roles.length === 0) {
+            return next();
+        }
+        // Check if user has any of the required roles
+        if (!req.user.role || !roles.includes(req.user.role)) {
+            return res.status(403).json({
+                success: false,
+                error: `Access denied. Required roles: ${roles.join(', ')}. Your role: ${req.user.role || 'none'}.`
             });
         }
         next();

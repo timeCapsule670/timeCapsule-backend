@@ -10,9 +10,11 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const childrenRoutes_1 = __importDefault(require("./routes/childrenRoutes"));
+const childProfileRoutes_1 = __importDefault(require("./routes/childProfileRoutes"));
 const messageRoutes_1 = __importDefault(require("./routes/messageRoutes"));
 const categoriesRoutes_1 = __importDefault(require("./routes/categoriesRoutes"));
 const profilePictureRoutes_1 = __importDefault(require("./routes/profilePictureRoutes"));
+const inviteCodeRoutes_1 = __importDefault(require("./routes/inviteCodeRoutes"));
 const errorHandler_1 = require("./middleware/errorHandler");
 const app = (0, express_1.default)();
 // Middleware
@@ -23,9 +25,11 @@ app.use((0, morgan_1.default)('dev'));
 // Routes
 app.use('/api/auth', authRoutes_1.default);
 app.use('/api/children', childrenRoutes_1.default);
+app.use('/api/child-profiles', childProfileRoutes_1.default);
 app.use('/api/messages', messageRoutes_1.default);
 app.use('/api/categories', categoriesRoutes_1.default);
-app.use('/api/avatars', profilePictureRoutes_1.default);
+app.use('/api/profile-pictures', profilePictureRoutes_1.default);
+app.use('/api/invite-codes', inviteCodeRoutes_1.default);
 // Base route
 app.get('/', (req, res) => {
     res.json({

@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfile = exports.resetPassword = exports.login = exports.register = exports.resetPasswordValidation = exports.loginValidation = exports.registerValidation = void 0;
+exports.getProfile = exports.resetPasswordWithOTP = exports.verifyOTP = exports.forgotPassword = exports.resetPassword = exports.login = exports.register = exports.resetPasswordWithOTPValidation = exports.verifyOTPValidation = exports.forgotPasswordValidation = exports.resetPasswordValidation = exports.loginValidation = exports.registerValidation = void 0;
 const express_validator_1 = require("express-validator");
 const authService = __importStar(require("../services/authService"));
 const responseFormatter_1 = require("../utils/responseFormatter");
@@ -56,6 +56,33 @@ exports.loginValidation = [
 ];
 exports.resetPasswordValidation = [
     (0, express_validator_1.body)('email').isEmail().withMessage('Please provide a valid email address'),
+];
+// New validation rules for forgot password flow
+exports.forgotPasswordValidation = [
+    (0, express_validator_1.body)('email').isEmail().withMessage('Please provide a valid email address'),
+];
+exports.verifyOTPValidation = [
+    (0, express_validator_1.body)('email').isEmail().withMessage('Please provide a valid email address'),
+    (0, express_validator_1.body)('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be exactly 6 characters'),
+];
+exports.resetPasswordWithOTPValidation = [
+    (0, express_validator_1.body)('email').isEmail().withMessage('Please provide a valid email address'),
+    (0, express_validator_1.body)('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be exactly 6 characters'),
+    (0, express_validator_1.body)('newPassword')
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long')
+        .matches(/[a-z]/)
+        .withMessage('Password must contain at least one lowercase letter')
+        .matches(/[A-Z]/)
+        .withMessage('Password must contain at least one uppercase letter')
+        .matches(/\d/)
+        .withMessage('Password must contain at least one number'),
+    (0, express_validator_1.body)('confirmPassword').custom((value, { req }) => {
+        if (value !== req.body.newPassword) {
+            throw new Error('Password confirmation does not match password');
+        }
+        return true;
+    }),
 ];
 // Controller functions
 const register = async (req, res) => {
@@ -115,6 +142,63 @@ const resetPassword = async (req, res) => {
     }
 };
 exports.resetPassword = resetPassword;
+const forgotPassword = async (req, res) => {
+    try {
+        // Check validation results
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return (0, responseFormatter_1.sendError)(res, errors.array()[0].msg, 400);
+        }
+        const request = req.body;
+        const result = await authService.forgotPassword(request);
+        return (0, responseFormatter_1.sendSuccess)(res, result, 'OTP sent successfully', 200);
+    }
+    catch (error) {
+        if (error instanceof errorHandler_1.ApiError) {
+            return (0, responseFormatter_1.sendError)(res, error.message, error.statusCode);
+        }
+        return (0, responseFormatter_1.sendError)(res, error.message, 500);
+    }
+};
+exports.forgotPassword = forgotPassword;
+const verifyOTP = async (req, res) => {
+    try {
+        // Check validation results
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return (0, responseFormatter_1.sendError)(res, errors.array()[0].msg, 400);
+        }
+        const request = req.body;
+        const result = await authService.verifyOTP(request);
+        return (0, responseFormatter_1.sendSuccess)(res, result, 'OTP verified successfully', 200);
+    }
+    catch (error) {
+        if (error instanceof errorHandler_1.ApiError) {
+            return (0, responseFormatter_1.sendError)(res, error.message, error.statusCode);
+        }
+        return (0, responseFormatter_1.sendError)(res, error.message, 500);
+    }
+};
+exports.verifyOTP = verifyOTP;
+const resetPasswordWithOTP = async (req, res) => {
+    try {
+        // Check validation results
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return (0, responseFormatter_1.sendError)(res, errors.array()[0].msg, 400);
+        }
+        const request = req.body;
+        await authService.resetPasswordWithOTP(request);
+        return (0, responseFormatter_1.sendSuccess)(res, null, 'Password reset successfully', 200);
+    }
+    catch (error) {
+        if (error instanceof errorHandler_1.ApiError) {
+            return (0, responseFormatter_1.sendError)(res, error.message, error.statusCode);
+        }
+        return (0, responseFormatter_1.sendError)(res, error.message, 500);
+    }
+};
+exports.resetPasswordWithOTP = resetPasswordWithOTP;
 const getProfile = async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
