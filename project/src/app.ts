@@ -9,6 +9,7 @@ import childProfileRoutes from './routes/childProfileRoutes';
 import messageRoutes from './routes/messageRoutes';
 import categoriesRoutes from './routes/categoriesRoutes';
 import profilePictureRoutes from './routes/profilePictureRoutes';
+import inviteCodeRoutes from './routes/inviteCodeRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api/child-profiles', childProfileRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/profile-pictures', profilePictureRoutes);
+app.use('/api/invite-codes', inviteCodeRoutes);
 
 // Base route
 app.get('/', (req, res) => {

@@ -25,3 +25,25 @@ export interface AuthResponse {
 export interface ResetPasswordRequest {
   email: string;
 }
+
+// New interfaces for forgot password flow
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface VerifyOTPRequest {
+  email: string;
+  otp: string;
+}
+
+export interface ResetPasswordWithOTPRequest {
+  email: string;
+  otp: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface OTPResponse {
+  message: string;
+  expiresAt: string;
+}

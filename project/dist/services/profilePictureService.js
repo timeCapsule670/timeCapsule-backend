@@ -6,19 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadProfilePicture = exports.saveProfilePicture = exports.getAllAvatars = void 0;
 const supabase_1 = __importDefault(require("../config/supabase"));
 // Predefined avatars as specified in the requirements
-const PREDEFINED_AVATARS = [
-    { id: 'avatar-1', imageUrl: '/assets/avatars/avatar-1.png', label: 'Avatar 1' },
-    { id: 'avatar-2', imageUrl: '/assets/avatars/avatar-2.png', label: 'Avatar 2' },
-    { id: 'avatar-3', imageUrl: '/assets/avatars/avatar-3.png', label: 'Avatar 3' },
-    { id: 'avatar-4', imageUrl: '/assets/avatars/avatar-4.png', label: 'Avatar 4' },
-    { id: 'teenage-girl', imageUrl: '/assets/avatars/teenage-girl.png', label: 'Teenage Girl' },
-    { id: 'profile', imageUrl: '/assets/avatars/profile.png', label: 'Profile' }
-];
 const getAllAvatars = async () => {
     try {
         // Fetch avatars from Supabase Storage bucket
         const { data: files, error } = await supabase_1.default.storage
-            .from('avatars')
+            .from('profile-pictures')
             .list('', {
             limit: 100,
             offset: 0,
@@ -28,15 +20,15 @@ const getAllAvatars = async () => {
             throw new Error(`Failed to fetch avatars from storage: ${error.message}`);
         }
         if (!files || files.length === 0) {
-            // Fallback to predefined avatars if no files found
-            return PREDEFINED_AVATARS;
+            // Return empty array if no files found
+            return [];
         }
         // Convert storage files to Avatar objects
         const avatars = files
             .filter(file => file.name && file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
             .map((file, index) => {
             const { data: urlData } = supabase_1.default.storage
-                .from('avatars')
+                .from('profile-pictures')
                 .getPublicUrl(file.name);
             return {
                 id: `avatar-${index + 1}`,
@@ -109,10 +101,10 @@ const uploadProfilePicture = async (file) => {
         // Generate unique filename
         const timestamp = Date.now();
         const fileExtension = file.originalname.split('.').pop();
-        const fileName = `profile-pictures/${timestamp}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+        const fileName = `uploads/${timestamp}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
         // Upload to Supabase Storage
         const { data: uploadData, error: uploadError } = await supabase_1.default.storage
-            .from('avatars')
+            .from('profile-pictures')
             .upload(fileName, file.buffer, {
             contentType: file.mimetype,
             cacheControl: '3600',
@@ -123,7 +115,7 @@ const uploadProfilePicture = async (file) => {
         }
         // Get public URL
         const { data: urlData } = supabase_1.default.storage
-            .from('avatars')
+            .from('profile-pictures')
             .getPublicUrl(fileName);
         return {
             image_url: urlData.publicUrl,
