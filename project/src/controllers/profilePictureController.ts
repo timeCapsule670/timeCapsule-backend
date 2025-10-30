@@ -14,6 +14,32 @@ export const saveProfilePictureValidation = [
   body('data')
     .notEmpty()
     .withMessage('Data is required'),
+  body('firstName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('First name must be between 2 and 50 characters'),
+  body('lastName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('Last name must be between 2 and 50 characters'),
+  body('dateOfBirth')
+    .optional()
+    .isISO8601()
+    .withMessage('Date of birth must be a valid ISO date (YYYY-MM-DD)')
+    .custom((value) => {
+      if (value) {
+        const date = new Date(value);
+        const now = new Date();
+        if (date > now) {
+          throw new Error('Date of birth cannot be in the future');
+        }
+      }
+      return true;
+    }),
 ];
 
 // Get all available avatars

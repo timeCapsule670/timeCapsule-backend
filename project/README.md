@@ -69,6 +69,12 @@ src/
 - `POST /api/avatars/upload/profile-picture` - Upload a profile picture file (protected)
 - `POST /api/avatars/director/profile-picture` - Save director's profile picture (protected)
 
+### Family Setup
+
+- `POST /api/family-setup` - Complete family setup (update director role + create relationships) (protected)
+- `PUT /api/family-setup/director-role` - Update only the director's role/type (protected)
+- `POST /api/family-setup/relationships` - Create only the director-actor relationships (protected)
+
 ## Setup and Installation
 
 1. Clone the repository
@@ -88,3 +94,6 @@ The API expects the following tables to exist in your Supabase database:
 - `children`: Child profiles associated with users
 - `messages`: Messages scheduled for delivery
 - `director_categories`: Junction table linking directors to their selected categories
+- `directors`: Director profiles (parents/guardians)
+- `actors`: Child profiles in the enhanced system
+- `director_actor`: Junction table linking directors to actors with relationship types

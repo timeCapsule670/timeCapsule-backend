@@ -49,7 +49,7 @@ export const saveProfilePicture = async (
   request: SaveProfilePictureRequest
 ): Promise<{ profile_picture_url: string }> => {
   try {
-    const { type, data } = request;
+    const { type, data, firstName, lastName, dateOfBirth } = request;
     
     if (!type || !data) {
       throw new Error('Profile picture type and data are required');
@@ -75,13 +75,34 @@ export const saveProfilePicture = async (
       throw new Error('Invalid profile picture type. Must be "upload" or "avatar"');
     }
 
-    // Update the director's profile picture URL in the database
+    // Prepare update object with profile picture and optional fields
+    const updateData: any = {
+      profile_picture_url: profilePictureUrl,
+      updated_at: new Date().toISOString()
+    };
+
+    // Add firstName if provided
+    if (firstName !== undefined && firstName !== null) {
+      updateData.first_name = firstName.trim();
+    }
+
+    // Add lastName if provided
+    if (lastName !== undefined && lastName !== null) {
+      updateData.last_name = lastName.trim();
+    }
+
+    // Add dateOfBirth if provided (convert to ISO date format)
+    if (dateOfBirth !== undefined && dateOfBirth !== null) {
+      const date = new Date(dateOfBirth);
+      if (!isNaN(date.getTime())) {
+        updateData.date_of_birth = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      }
+    }
+
+    // Update the director's profile picture URL and other fields in the database
     const { error: updateError } = await supabase
       .from('directors')
-      .update({ 
-        profile_picture_url: profilePictureUrl,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('id', directorId);
 
     if (updateError) {

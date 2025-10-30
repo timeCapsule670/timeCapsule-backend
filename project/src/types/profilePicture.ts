@@ -12,6 +12,9 @@ export interface GetAvatarsResponse {
 export interface SaveProfilePictureRequest {
   type: 'upload' | 'avatar';
   data: string; // image_url for upload, avatar_id for avatar
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string; // ISO date string (YYYY-MM-DD)
 }
 
 export interface SaveProfilePictureResponse {
