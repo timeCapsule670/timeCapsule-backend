@@ -27,7 +27,7 @@ app.use('/api/children', childrenRoutes);
 app.use('/api/child-profiles', childProfileRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoriesRoutes);
-app.use('/api/profile-pictures', profilePictureRoutes);
+app.use('/api/avatars', profilePictureRoutes);
 app.use('/api/invite-codes', inviteCodeRoutes);
 app.use('/api/family-setup', familySetupRoutes);
 
