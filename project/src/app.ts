@@ -11,6 +11,7 @@ import categoriesRoutes from './routes/categoriesRoutes';
 import profilePictureRoutes from './routes/profilePictureRoutes';
 import inviteCodeRoutes from './routes/inviteCodeRoutes';
 import familySetupRoutes from './routes/familySetupRoutes';
+import promptRoutes from './routes/promptRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/children', childrenRoutes);
@@ -30,6 +32,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/avatars', profilePictureRoutes);
 app.use('/api/invite-codes', inviteCodeRoutes);
 app.use('/api/family-setup', familySetupRoutes);
+app.use('/api/prompts', promptRoutes);
 
 // Base route
 app.get('/', (req, res) => {

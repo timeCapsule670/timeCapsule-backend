@@ -30,6 +30,47 @@ export const getAllCategories = async (): Promise<Category[]> => {
   }
 };
 
+export const getCategoryNamesByIds = async (ids: string[]): Promise<string[]> => {
+  if (!ids || ids.length === 0) return [];
+  try {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', ids);
+
+    if (error) {
+      throw new Error(`Failed to fetch category names: ${error.message}`);
+    }
+    return (data ?? []).map(c => c.name);
+  } catch (error) {
+    throw new Error(`Failed to fetch category names: ${error}`);
+  }
+};
+
+export const getDirectorCategoryNames = async (authUserId: string): Promise<string[]> => {
+  try {
+    const { data: directorData, error: directorError } = await supabase
+      .from('directors')
+      .select('id')
+      .eq('auth_user_id', authUserId)
+      .single();
+
+    if (directorError || !directorData) return [];
+
+    const { data: relations, error: relError } = await supabase
+      .from('director_categories')
+      .select('category_id')
+      .eq('director_id', directorData.id);
+
+    if (relError || !relations?.length) return [];
+
+    const categoryIds = relations.map(r => r.category_id);
+    return getCategoryNamesByIds(categoryIds);
+  } catch {
+    return [];
+  }
+};
+
 export const saveDirectorCategories = async (
   authUserId: string, 
   request: SaveCategoriesRequest

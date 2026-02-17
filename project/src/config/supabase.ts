@@ -4,9 +4,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // <-- Use the service role key here
-);
+const supabaseUrl =
+  process.env.SUPABASE_URL ?? process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    'Missing Supabase config. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY) in .env'
+  );
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default supabase;
