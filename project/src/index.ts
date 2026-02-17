@@ -1,8 +1,6 @@
-// src/index.ts
-import dotenv from 'dotenv';
+// src/index.ts - load env first so Supabase/OpenRouter config see vars (e.g. on Render)
+import 'dotenv/config';
 import app from './app';
-
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 

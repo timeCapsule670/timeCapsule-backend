@@ -1,8 +1,5 @@
 // src/config/supabase.ts
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const supabaseUrl =
   process.env.SUPABASE_URL ?? process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -11,7 +8,7 @@ const supabaseKey =
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error(
-    'Missing Supabase config. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY) in .env'
+    'Missing Supabase config. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY) in .env or in your host’s environment (e.g. Render → Service → Environment).'
   );
 }
 
